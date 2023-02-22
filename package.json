@@ -1,7 +1,7 @@
 {
   "name": "todo-nem",
   "version": "1.0.0",
-  "description": "TODO server application with Node, Express and MongoDB",
+  "description": "TODO server application with Node, Express and MongoDB.",
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./index.js --exec babel-node -e js"
