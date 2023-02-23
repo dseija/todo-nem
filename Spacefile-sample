@@ -1,0 +1,24 @@
+# This is a sample file template for deta.space micro deployments.
+# Before deploy the project, copy this file and rename it as 'Spacefile',
+# then replace the env default values with the real ones (same as the .env file).
+
+# Spacefile Docs: https://go.deta.dev/docs/spacefile/v0
+v: 0
+micros:
+  - name: todo-nem
+    src: .
+    engine: nodejs16
+    primary: true
+    public_routes:
+      - '/*'
+    presets:
+      env:
+        - name: DB_CONNECTION_URL
+          default: 'mongodb+srv://<USERNAME>:<PASSWORD>@<CLUSTER>.<ATLAS_ID>.mongodb.net/<DB_NAME>?retryWrites=true&w=majority'
+        - name: JWT_SECRET
+          default: <MY_SUPER_SECRET>
+    commands:
+      - npm run build
+    include:
+      - dist
+    run: node dist/index.js
