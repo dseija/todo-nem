@@ -1,8 +1,10 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import routesHandler from './routes';
 import { dbConfig } from './configs';
+import setupPassport from './libs/passport';
 
 const app = express();
 
@@ -21,11 +23,16 @@ mongoose
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Passport setup
+const passport = setupPassport();
+app.use(passport.initialize());
+
 // add routes
-app.use('/', routesHandler());
+app.use('/', cors(), routesHandler());
 
 // error handling
 app.use((err, req, res, next) => {
+  console.log({ err });
   const statusCodes = {
     ValidationError: 400,
     NotFound: 404,
