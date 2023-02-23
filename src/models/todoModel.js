@@ -12,11 +12,21 @@ const todoSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      index: true,
+    },
   },
   {
     timestamps: true,
   }
 );
+
+todoSchema.methods.safeProps = function () {
+  const { id, description, completed, createdAt, updatedAt } = this;
+  return { id, description, completed, createdAt, updatedAt };
+};
 
 const todoModel = mongoose.model('Todo', todoSchema);
 

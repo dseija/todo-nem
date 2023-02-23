@@ -1,4 +1,5 @@
 import userModel from '../models/userModel';
+import jwt from 'jsonwebtoken';
 
 export const createUser = async (userProps) => {
   const newUser = new userModel(userProps);
@@ -6,6 +7,7 @@ export const createUser = async (userProps) => {
     const user = await newUser.save();
     return [null, user.safeProps()];
   } catch (err) {
+    if (err.code === 11000) return [{ ...err, name: 'Duplicate' }];
     return [err];
   }
 };
@@ -43,4 +45,12 @@ export const updateUser = async (userId, userProps) => {
   } catch (err) {
     return [err];
   }
+};
+
+export const getSignedToken = (userProps, apiConfig) => {
+  return jwt.sign(
+    { userId: userProps.id, username: userProps.username },
+    apiConfig.jwtSecret,
+    { expiresIn: apiConfig.jwtExpiration }
+  );
 };

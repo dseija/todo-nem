@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import passport from 'passport';
-import { createUser } from '../controllers/userController';
+import { createUser, getSignedToken } from '../controllers/userController';
 
-const authRoute = () => {
+const authRoute = ({ apiConfig }) => {
   const router = Router();
 
   router.post('/register', async (req, res, next) => {
@@ -15,8 +15,11 @@ const authRoute = () => {
   router.post(
     '/login',
     passport.authenticate('local', { session: false }),
-    async (req, res, next) => {
-      res.json(req.user);
+    async (req, res) => {
+      res.json({
+        ...req.user,
+        token: getSignedToken(req.user, apiConfig),
+      });
     }
   );
 

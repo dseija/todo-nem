@@ -1,1 +1,0 @@
-export { dbConfig } from './db';

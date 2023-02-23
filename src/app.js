@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import routesHandler from './routes';
-import { dbConfig } from './configs';
-import setupPassport from './libs/passport';
+import { dbConfig, apiConfig } from './config';
+import setupPassport from './lib/passport';
 
 const app = express();
 
@@ -24,18 +24,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // Passport setup
-const passport = setupPassport();
+const passport = setupPassport({ apiConfig });
 app.use(passport.initialize());
 
 // add routes
-app.use('/', cors(), routesHandler());
+app.use('/', cors(), routesHandler({ apiConfig }));
 
 // error handling
 app.use((err, req, res, next) => {
-  console.log({ err });
   const statusCodes = {
     ValidationError: 400,
     NotFound: 404,
+    Duplicate: 409,
   };
   const status = statusCodes[err.name] || 500;
   res.status(err.status || status).json(err);
