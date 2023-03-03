@@ -12,7 +12,7 @@ export const createTodo = async (userId, description) => {
 
 export const getTodos = async (userId) => {
   try {
-    const todos = await todoModel.find({ userId }).sort({ createdAt: -1 });
+    const todos = await todoModel.find({ userId }).sort({ createdAt: 1 });
     return [null, todos.map((todo) => todo.safeProps())];
   } catch (err) {
     return [err];
